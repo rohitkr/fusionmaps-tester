@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+     <head>
+        <title>Sample using the RAW files	</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <!--script type="text/javascript" src="../out/build/source/fusioncharts.js"></script-->
+
+        <title>Maps Automatic Watermark Testing Tool</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+<!--         <script type="text/javascript" src="../../../out/build/source/fusioncharts.js"></script>
+        <script type="text/javascript" src="../../../out/build/source/fusioncharts.charts.js"></script>
+        <script type="text/javascript" src="../../../out/build/source/fusioncharts.maps.js"></script>
+ --> 
+
+        <script type="text/javascript" src="../../../out/build/eval/fusioncharts.js"></script>
+        <script type="text/javascript" src="../../../out/build/eval/fusioncharts.charts.js"></script>
+        <script type="text/javascript" src="../../../out/build/eval/fusioncharts.maps.js"></script>
+
+		<!-- <script type="text/javascript" src="../vendors/xt-maps/source/js/maps/fusioncharts.world.js"></script> -->
+
+        <style type="text/css">
+            a {
+                text-decoration: none;
+                text-align: 
+            }
+            .controls {
+                margin: 15px 0 15px 0;
+            }
+            pre {
+                display: inline;
+            }
+        </style>
+    </head>
+<body>
+
+<center>
+
+    <div id="resizable" class="ui-widget-content" style="border: none">
+        <div class="controls" >
+            Automatic Test:&nbsp;&nbsp;
+            <a href="javascript:void(0)" onclick="startAutoTest()"> Start/Pause </a>
+        </div>
+        <div id="container" ></div>
+        <div class="controls" >
+            <a href="javascript:void(0)" onclick="changeMap(-1)"> <- prev </a>
+            &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0)" onclick="changeMap(1)"> next -> </a>
+        </div>
+        <div class="controls" id="results" style="font-family: Verdana; font-size: 12px; color: #555; width: 600px; text-align: left">
+            Results are stored in `chartCredit` global object.
+        </div>
+                <table>
+                    <tr>
+                        <td class="chart-div" valign="top"  width="300" height="350">
+                            <div id="red-chart-container-div" style='width:100%; height:100%; '>
+                                Maps with Credit Disabled
+                                <div style='font-family: Verdana; font-size: 10px; color: #333;
+                                     text-align: left; padding-top:1%; margin:0;'>
+                                    <pre id="credit-disabled">                                        
+                                    </pre>
+                                </div>
+                            </div>
+                        </td>
+                        <td width="24"></td>
+                        <td class="chart-div" valign="top"  width="300" height="350">
+                            <div id="red-chart-container-div" style='width:100%; height:100%; '>
+                                Maps with Credit Enabled
+                                <div style='font-family: Verdana; font-size: 10px; color: #333;
+                                     text-align: left; padding-top:1%; margin:0;'>
+                                    <pre id="credit-enabled">                               
+                                    </pre>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+
+    </div>
+</center>
+
+	<script type="text/javascript">
+
+        var maps = ["aargau", "abruzzo", "absheron", "acre", "afghanistan", "africa", "africaregion", "aguascalientes", "aichi", "aileu", "ainaro", "ajitgarh", "akershus", "akita", "akmola", "aktobe", "alabama", "alabamaareacode", "alabamacongressional", "alagoas", "alaska", "alaskaareacode", "alaskacongressional", "albania", "alberta", "aleppo", "alexandria", "algeria", "almaty", "almatycity", "alminya", "alsharqeyah", "amapa", "amazonas", "americansamoacongressional", "amritsar", "andamanandnicobar", "andhrapradesh", "andorra", "angola", "anguilla", "anhui", "antigua", "antwerp", "aomori", "appenzellausserrhoden", "appenzellinnerrhoden", "apulia", "aran", "argentina", "arizona", "arizonaareacode", "arizonacongressional", "arkansas", "arkansasareacode", "arkansascongressional", "armenia", "arraqqah", "aruba", "arunachalpradesh", "asia", "asia3", "asiageorgia", "asiaregion", "asir", "assam", "assuwayda", "astanacity", "aswan", "asyut", "attapeu", "atyrau", "auckland", "austagder", "australia", "australia2", "australiancapitalterritory", "austria", "aveiro", "azadkashmir", "azerbaijan", "azerbaijanregion", "badakhshan", "badenwurttemberg", "badghis", "baghlan", "bahah", "bahamas", "bahera", "bahia", "bahrain", "baikonurcity", "bajacalifornia", "bajacaliforniasur", "balkh", "balochistan", "bamyan", "bangladesh", "baniswaif", "banskabystrica", "barbados", "barisal", "barnala", "basellandschaft", "basilicata", "bathinda", "baucau", "bavaria", "bayofplenty", "beijing", "beirut", "beja", "belarus", "belgium", "belgiumluxembourg", "belize", "benin", "beqaa", "berat", "berlin", "bern", "bhutan", "bihar", "blagoevgrad", "blekinge", "bobonaro", "bokeo", "bolikhamsai", "bolivia", "bonaire", "bosniaherzegovina", "bostonareacode", "botswana", "braga", "braganca", "brandenburg", "bratislava", "brazil", "brazilregion", "britishcolumbia", "britishvirginisland", "brunei", "brussels", "bucurestiilfov", "bulgaria", "bulgariamontana", "burgas", "burgenland", "burkinafaso", "burma", "burundi", "busan", "buskerud", "cairo", "calabria", "california", "californiaareacode", "californiacongressional", "cambodia", "cameroon", "campania", "campeche", "canada", "canterbury", "capeverde", "caribbeansregion", "castelobranco", "caymanislands", "ceara", "centralafrica", "centralafricanrepublic", "centralamerica", "centralamerica2", "centralamericawithcaribbean", "centralandwestern", "centralasia", "centralbohemianregion", "centraleuropeanregion", "centralhungary", "centralsingapore", "centraltransdanubia", "centru", "chad", "chagang", "champasak", "chandigarh", "chattisgarh", "chiba", "chicagoareacode", "chile", "china", "china2", "china3", "chittagong", "chongqing", "chungcheongbukdo", "chungcheongnamdo", "coimbra", "colima", "colombia", "colorado", "coloradoareacode", "coloradocongressional", "comoros", "congo", "connecticut", "connecticutareacode", "connecticutcongressional", "costarica", "cotedivoire", "covalima", "croatia", "cuba", "curacao", "cyprus", "cyprus2", "czechrepublic", "czechrepublicdistricts", "dadraandnagarhaveli", "daegu", "daejeon", "dagligshirvan", "dalarna", "dallasfortworthareacode", "damananddiu", "damascus", "daqahliya", "daraa", "daykundi", "deirezzor", "delaware", "delawareareacode", "delawarecongressional", "delhi", "democraticrepublicofcongo", "denmark", "denmarkregion", "detroitareacode", "dhaka", "diber", "dili", "districtofcolumbia", "districtofcolumbiaareacode", "districtofcolumbiacongressional", "distritofederal", "djibouti", "dobrich", "dolnoslaskie", "dominica", "dominicanrepublic", "domyat", "durres", "eastern", "easternafrica", "easternasia", "easternnorway", "easternprovince", "easteuropeanregion", "eastflanders", "eastkazakhstan", "eastnorthcentraldma", "eastsouthcentraldma", "easttimor", "ecuador", "egypt", "ehime", "elbasan", "elsalvador", "emiliaromagna", "england", "englandregion", "equatorialguinea", "eritrea", "ermera", "esfahan", "espiritosanto", "estonia", "ethiopia", "europe", "europe2", "europeregion", "europewithcountries", "europewithcountries2", "evora", "falklandisland", "farah", "faridkot", "faro", "faryab", "fata", "fatehgarhsahib", "fayoum", "fazilka", "fier", "fiji", "finland", "finnmark", "firozepur", "flemishbrabant", "florida", "floridaareacode", "floridacongressional", "france", "france2016", "francedepartment", "frenchguiana", "fribourg", "friuliveneziagiulia", "fujian", "fukui", "fukuoka", "fukushima", "gabon", "gabrovo", "gambia", "gangwondo", "ganjagazakh", "gansu", "gavleborg", "geneva", "georgia", "georgiaareacode", "georgiacongressional", "germany", "ghana", "gharbiya", "ghazni", "ghor", "gifu", "gilgitbaltistan", "gisborne", "giza", "gjirokaster", "goa", "goias", "gradsofia", "graubunden", "greece", "greenland", "grenada", "guadaloupe", "guamcongressional", "guanajuato", "guangdong", "guangxi", "guarda", "guatemala", "gubakhachmaz", "guinea", "guineabissau", "guizhou", "gujarat", "gunma", "gurdaspur", "guyana", "gwangju", "gyeonggido", "gyeongsangbukdo", "gyeongsangnamdo", "hail", "hainan", "hainaut", "haiti", "halland", "hama", "harjumaa", "haryana", "hasaka", "haskovo", "hawaii", "hawaiiareacode", "hawaiicongressional", "hawkesbay", "hebei", "hedmark", "heilongjiang", "helmand", "helwan", "henan", "herat", "hesse", "hiiumaa", "himachalpradesh", "hiroshima", "hokkaido", "homs", "honduras", "hongkong", "hordaland", "hoshiarpur", "hovedstaden", "hradeckralove", "huaphan", "hubei", "hunan", "hungary", "hungaryregions", "hyogo", "ibaraki", "iceland", "idaho", "idahoareacode", "idahocongressional", "idavirumaa", "idlib", "iledefrance", "illinois", "illinoisareacode", "illinoiscongressional", "incheon", "india", "indiana", "indianaareacode", "indianacongressional", "indonesia", "iowa", "iowaareacode", "iowacongressional", "iran", "iranregions", "iraq", "ireland", "ishikawa", "islamabad", "islands", "ismailia", "israel", "italy", "iwate", "jalandhar", "jamaica", "jambyl", "jammuandkashmir", "jamtland", "japan", "jarvamaa", "jawf", "jejudo", "jeollabukdo", "jeollanamdo", "jharkhand", "jiangsu", "jiangxi", "jilin", "jizan", "jogevamaa", "jonkoping", "jordan", "jowzjan", "jura", "kabul", "kaesong", "kafralsheikh", "kagawa", "kagoshima", "kalbajarlachin", "kalmar", "kanagawa", "kandahar", "kangwon", "kansas", "kansasareacode", "kansascongressional", "kapisa", "kapurthala", "karaganda", "kardzhali", "karlovyvaryregion", "karnataka", "karnten", "kazakhstan", "kentucky", "kentuckyareacode", "kentuckycongressional", "kenya", "kerala", "kermanshah", "khammouane", "khost", "khulna", "khyberpakhtunkhwa", "kiribati", "kochi", "korce", "kosice", "kosovodistricts", "kostanay", "kowlooncity", "kronoberg", "kujawskopomorskie", "kukes", "kumamoto", "kumgangsan", "kunar", "kunduz", "kuwait", "kwaitsing", "kwuntong", "kyoto", "kyrgyzstan", "kyustendil", "kyzylorda", "laanemaa", "laanevirumaa", "laghman", "lakshadweep", "lankaran", "laos", "latakia", "latvia", "lautem", "lazio", "lebanon", "lesotho", "lezhe", "liaoning", "liberec", "liberia", "libya", "liechtenstein", "liege", "lieria", "liguria", "limburgbgomeenten", "liquica", "lisboa", "lithuania", "lodzkie", "logar", "lombardy", "louisiana", "louisianaareacode", "louisianacongressional", "lovech", "lowersaxony", "luangnamtha", "luangprabang", "lubelskie", "lubuskie", "lucerne", "ludhiana", "luxembourg", "luxer", "lyon", "macau", "macedonia", "madagascar", "madagascarregions", "madhyapradesh", "madinah", "maharashtra", "maidanwardak", "maine", "maineareacode", "mainecongressional", "makkah", "malawi", "malaysia", "mali", "malopolskie", "malta", "manatuto", "manawatuwanganui", "mangystau", "manipur", "manitoba", "mansa", "manufahi", "maranhao", "marche", "marlborough", "marseille", "marshallisland", "martinique", "maryland", "marylandareacode", "marylandcongressional", "mashhad", "massachusetts", "massachusettsareacode", "massachusettscongressional", "matogrosso", "matogrossodosul", "matrouh", "mauritania", "mauritius", "mazowieckie", "mecklenburgvorpommern", "meghalaya", "mexico", "mexicodistritofederal", "michigan", "michiganareacode", "michigancongressional", "micronesia", "middleatlanticdma", "middleeast", "midtjylland", "mie", "minasgerais", "minnesota", "minnesotaareacode", "minnesotacongressional", "mississippi", "mississippiareacode", "mississippicongressional", "missouri", "missouriareacode", "missouricongressional", "miyagi", "miyazaki", "mizoram", "moga", "moldova", "molise", "monaco", "mongolia", "monofiya", "montana", "montanaareacode", "montanacongressional", "montenegro", "montserrat", "moraviasilesia", "moreogromsdal", "morocco", "mountaindma", "mountlebanon", "mozambique", "mymensingh", "nabatieh", "nagaland", "nagano", "nagasaki", "najran", "nakhchivan", "namibia", "namur", "nangarhar", "nara", "nauru", "nayarit", "nebraska", "nebraskaareacode", "nebraskacongressional", "neimongol", "nelson", "nepal", "netherlands", "neuchatel", "nevada", "nevadaareacode", "nevadacongressional", "newbrunswick", "newcaledonia", "newenglanddma", "newfoundlandandlabrador", "newhampshire", "newhampshireareacode", "newhampshirecongressional", "newjersey", "newjerseyareacode", "newjerseycongressional", "newmexico", "newmexicoareacode", "newmexicocongressional", "newsouthwales", "newyork", "newyorkareaareacode", "newyorkareacode", "newyorkcongressional", "newzealand", "nicaragua", "nidwalden", "niederosterreich", "niger", "nigeria", "niigata", "nimruz", "ningxiahui", "nitra", "nordest", "nordjylland", "nordland", "nordtrondelag", "nordvest", "norrbotten", "northamerica", "northamericawcaribbean", "northamericawocentral", "northcarolina", "northcarolinaareacode", "northcarolinacongressional", "northdakota", "northdakotaareacode", "northdakotacongressional", "northdistricthongkong", "northeast", "northernafrica", "northernasia", "northernborders", "northerncaliforniabayareacode", "northerngreatplain", "northernhungary", "northernireland", "northernnorway", "northernterritory", "northeuropeanregion", "northhamgyong", "northhwangae", "northkazakhstan", "northkorea", "northland", "northlebanon", "northpyongan", "northrhinewestphalia", "northsinai", "northwest", "northwestterritories", "norway", "norwayregion", "novascotia", "nunavut", "nuristan", "oberosterreich", "obwalden", "oceania", "odisha", "oecusse", "ohio", "ohioareacode", "ohiocongressional", "oita", "okayama", "okinawa", "oklahoma", "oklahomaareacode", "oklahomacongressional", "olomoucregion", "oman", "ontario", "opolskie", "oppland", "orebro", "oregon", "oregonareacode", "oregoncongressional", "osaka", "oslo", "ostergotland", "ostfold", "otago", "oudomxay", "pacificdma", "pakistan", "paktia", "paktika", "palau", "panama", "panjshir", "papuanewguinea", "para", "paraguay", "paraiba", "parana", "pardubiceregion", "paris", "parnumaa", "parwan", "pathankot", "patiala", "pavlodar", "pazardzhik", "pennsylvania", "pennsylvaniaareacode", "pennsylvaniacongressional", "pernambuco", "pernik", "peru", "philippines", "phoenixareacode", "phongsali", "piaui", "piedmont", "pleven", "plovdiv", "plzenregion", "podkarpackie", "podlaskie", "poland", "polandcounties", "polvamaa", "pomorskie", "portalegre", "porto", "portsaid", "portugal", "prague", "presov", "princeedwardisland", "puducherry", "puertorico", "puertoricocongressional", "punjab", "punjabpakistan", "pyongyang", "qalyoubiya", "qassim", "qatar", "qina", "qinghai", "quebec", "queensland", "queretarodearteaga", "quintanaroo", "quneitra", "rajasthan", "rajshahi", "rangpur", "raplamaa", "rason", "razgrad", "redsea", "rhinelandpalatinate", "rhodeisland", "rhodeislandareacode", "rhodeislandcongressional", "rifdimashq", "riodejaneiro", "riograndedonorte", "riograndedosul", "riyadh", "rogaland", "romania", "romaniaregion", "rondonia", "roraima", "rupnagar", "ruse", "russia", "rwanda", "ryanggang", "saaremaa", "saarland", "sachsenanhalt", "saga", "saikung", "saintbarthelemy", "sainteustatius", "saintgallen", "saintkittsandnevis", "saintlucia", "saintmartin", "saintvincentandthegrenadines", "saitama", "salavan", "salzburg", "samangan", "samoa", "sangrur", "sanmarino", "santacatarina", "santarem", "saopaulo", "saotomeandprincipe", "sardinia", "sarepol", "saskatchewan", "saudiarabia", "savannakhet", "saxony", "sayabouly", "schaffhausen", "schleswigholstein", "schwyz", "scotland", "scotlandregion", "seattleareacode", "sekong", "senegal", "seoul", "serbia", "serbiawokosovo", "sergipe", "setubal", "seychelles", "shaanxi", "shahidbhagatsinghnagar", "shakizaqatala", "shamshuipo", "shandong", "shanghai", "shanxi", "shatin", "shiga", "shimane", "shizuoka", "shkoder", "shumen", "sichuan", "sicily", "sierraleone", "sikkim", "silistra", "sindh", "singapore", "sinuiju", "sixoctober", "sjaelland", "skane", "slaskie", "sliven", "slovakia", "slovenia", "smolyan", "sodermanland", "sofia", "sognogfjordane", "solomonisland", "solothurn", "somalia", "sonora", "sortrondelag", "southafrica", "southamerica", "southatlanticdma", "southaustralia", "southbohemia", "southcarolina", "southcarolinaareacode", "southcarolinacongressional", "southdakota", "southdakotaareacode", "southdakotacongressional", "southeast", "southeastasia", "southern", "southernafrica", "southernasia", "southerncalifornialaareacode", "southerngreatplain", "southernnorway", "southerntransdanubia", "southeuropeanregion", "southhamgyong", "southhwangae", "southkazakhstan", "southkorea", "southland", "southlebanon", "southmoravia", "southpyongan", "southsinai", "southsudan", "southwest", "spain", "spainprovinces", "srilanka", "srimuktsarsahib", "starazagora", "steiermark", "stockholm", "sudan", "sudanwosouthsudan", "sudest", "sudmuntenia", "sudvestoltenia", "suez", "suhaj", "suriname", "swaziland", "sweden", "swietokrzyskie", "switzerland", "syddanmark", "sylhet", "syria", "tabriz", "tabuk", "taipo", "taiwan", "tajikistan", "takhar", "tamaulipas", "tamilnadu", "tanzania", "taranaki", "targovishte", "tarntaransahib", "tartumaa", "tartus", "tasman", "tasmania", "tehran", "telangana", "telemark", "tennessee", "tennesseeareacode", "tennesseecongressional", "texas", "texasareacode", "texascongressional", "thailand", "thurgau", "thuringia", "tianjin", "tibet", "ticino", "tirana", "tirol", "tocantins", "tochigi", "togo", "tokushima", "tokyo", "tonga", "tottori", "toyama", "trencin", "trentinoaltoadige", "trinidadandtobago", "tripura", "trnava", "troms", "trondelag", "tsuenwan", "tuenmun", "tunisia", "turkey", "turkmenistan", "turksandcaicos", "tuscany", "tuvalu", "uae", "uganda", "uk", "uk7", "ukraine", "ulsan", "umbria", "uppsala", "urozgan", "uruguay", "usa", "usacentralregion", "usadma", "usanortheastregion", "usanorthwestregion", "usaregion", "usasoutheastregion", "usasouthwestregion", "usatimezone", "usmsa", "ustinadlabem", "usvirginisland", "usvirginislandscongressional", "utah", "utahareacode", "utahcongressional", "uttarakhand", "uttarpradesh", "uzbekistan", "valais", "valgamaa", "valledaosta", "vanuatu", "varmland", "varna", "vasterbotten", "vasternorrland", "vastmanland", "vastragotaland", "vaticancity", "vaud", "velikotarnovo", "veneto", "venezuela", "vermont", "vermontareacode", "vermontcongressional", "vest", "vestagder", "vestfold", "vianadocastelo", "victoria", "vidin", "vientianecapital", "vientianeprovince", "vietnam", "vilareal", "viljandimaa", "viqueque", "virginia", "virginiaareacode", "virginiacongressional", "viseu", "vlore", "vorarlberg", "vorumaa", "vratsa", "vysocina", "wadygadid", "waikato", "wakayama", "wales", "walloonbrabant", "wanchai", "warminskomazurskie", "washington", "washingtonareacode", "washingtoncongressional", "wellington", "westbengal", "westcoast", "westernafrica", "westernasia", "westernaustralia", "westernnorway", "westernsahara", "westerntransdanubia", "westeuropeanregion", "westflanders", "westkazakhstan", "westnorthcentraldma", "westsouthcentraldma", "westvirginia", "westvirginiaareacode", "westvirginiacongressional", "wielkopolskie", "wien", "wisconsin", "wisconsinareacode", "wisconsincongressional", "wongtaisin", "world", "world8", "world8withantarctica", "worldwithantarctica", "worldwithcountries", "wyoming", "wyomingareacode", "wyomingcongressional", "xaisombounprovince", "xiengkhouang", "xinjiang", "yamagata", "yamaguchi", "yamanashi", "yambol", "yautsimmong", "yemen", "yuenlong", "yukharigarabakh", "yukonterritory", "yunnan", "zabul", "zacatecas", "zachodniopomorskie", "zambia", "zhejiang", "zilina", "zimbabwe", "zlin", "zurich"],
+            paletteColors = ['AFD8F8', 'F6BD0F', '8BBA00', 'FF8E46', '008E8E',
+                'D64646', '8E468E', '588526', 'B3AA00', '008ED6',
+                '9D080D', 'A186BE', 'CC6600', 'FDC689', 'ABA000',
+                'F26D7D', 'FFF200', '0054A6', 'F7941C', 'CC3300',
+                '006600', '663300', '6DCFF6'],
+            chartObj,
+            count = 0,
+            chartCredit = {
+                enabled: [],
+                disabled: [],
+                maps: {}
+            },
+            START_TIME,
+            END_TIME,
+            i;
+
+        FusionCharts.options.scriptBaseUri = '../../vendors/xt-maps/js/maps/';
+        // FusionCharts.options.scriptBaseUri = '../../vendors/xt-maps/source/js/maps/';
+        // FusionCharts.options.scriptBaseUri = '../../vendors/xt-maps/out/build/';
+
+        // fusioncharts.telemark.js:1 Uncaught SyntaxError: Unexpected identifier
+
+        // window.FusionCharts.options.html5ScriptNamePrefix = '../../../../develop/vendors/xt-maps/js/maps/fusioncharts.';
+
+        FusionCharts.addEventListener('rendered', function (e, a) {
+            var eles = document.getElementsByTagName('g'),
+                chartType = chartObj.chartType()
+                    .replace(/^[a-z]/, function(s) { return s.toUpperCase(); }),
+                credit = false;
+
+            // Find the credit label group and check the watermark
+            for (var i = 0, l = eles.length; i < l; i++) {
+                ele = eles[i];
+                credit = /creditgroup/.test(ele.getAttribute('class')) && ele.innerHTML !== '';
+            }
+
+            if (!chartCredit.maps[chartType]) {
+                if (credit) {
+                    chartCredit.enabled.push(chartType);
+                    document.getElementById('credit-enabled').innerHTML += '\n' + chartType;
+                } else {
+                    chartCredit.disabled.push(chartType);
+                    document.getElementById('credit-disabled').innerHTML += '\n' + chartType;
+                }
+                chartCredit.maps[chartType] = true;
+            }
+            
+            // console.log(count);
+            // if (count % 1 == 0) {
+            //     document.getElementById('credit-enabled').innerHTML += chartCredit.enabled.join('\n');
+            //     document.getElementById('credit-disabled').innerHTML += chartCredit.disabled.join('\n');
+            // }
+            if (window.runAutomation) {
+                changeMap(1);
+            }
+        });
+
+        function startAutoTest () {
+            if (!window.runAutomation) {
+                START_TIME = new Date().getTime();
+                changeMap(0, count + 1);
+                window.runAutomation = true;
+            } else {
+                window.runAutomation = false;
+            }
+        }
+
+        function changeMap (i, k) {
+            if (k || k == 0) {
+                count = k;
+            } else {
+                if (i === 1) {
+                    count++;
+                } else {
+                    count--;
+                }
+            }
+            if (count < 0 || count > maps.length - 1) {
+                // Write conclusion on result container.
+                if (window.runAutomation) {
+                    testComplete();
+                    window.runAutomation = false;
+                }
+                count = 0;
+                return;
+            }
+            // Change Chart cosmetics and caption
+            chartObj.setChartAttribute({
+                'caption': maps[count].replace(/^[a-z]/, function(s) { return s.toUpperCase(); }),
+                'entityfillcolor': paletteColors[Math.round(Math.random() * 23 + 0)]
+            });
+            maps[count] && chartObj.chartType(maps[count]);
+        }
+
+        function testComplete () {
+            END_TIME = new Date().getTime();
+            document.getElementById('results').innerHTML += '<br/>';
+            document.getElementById('results').innerHTML += '<br/>' + 'Time taken: ' + ((END_TIME - START_TIME) / 1000) + ' Seconds'
+            document.getElementById('results').innerHTML += '<br/>' + 'Total Maps: ' + maps.length;
+            document.getElementById('results').innerHTML += '<br/>' + 'Total maps with credit enabled: ' + chartCredit.enabled.length;
+            document.getElementById('results').innerHTML += '<br/>' + 'Total maps with credit disabled: ' + chartCredit.disabled.length;
+
+            document.getElementById('credit-enabled').innerHTML = chartCredit.enabled.join('\n');
+            document.getElementById('credit-disabled').innerHTML = chartCredit.disabled.join('\n');
+        }
+
+        // Render zero index map on FusionCharts ready
+        FusionCharts.ready(function () {
+            chartObj = new FusionCharts({
+                type: maps[0],
+                width: "600",
+                height: "350",
+                dataFormat: "json",
+                dataSource: {
+                    chart: {
+                        caption: maps[0].replace(/^[a-z]/, function(s) { return s.toUpperCase(); })
+                    }, 
+                    data: [{value: 50}, {value: 60}]
+                }
+            })
+            .render('container');
+        });
+
+
+  </script>
+
+</body>
+
+
+</html>
